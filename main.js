@@ -3,10 +3,10 @@ import bedduSalama from "./utils/banner.js"
 import { delay, readAccountsFromFile, readFile } from './utils/helper.js';
 import { claimMining, getNewToken, getUserFarm, activateMining } from './utils/api.js';
 
-async function refreshAccessToken(refreshToken) {
+async function refreshAccessToken(token, refreshToken, proxy) {
     let refresh;
     do {
-        refresh = await getNewToken(refreshToken);
+        refresh = await getNewToken(token, refreshToken, proxy);
         if (!refresh) log.info('Token refresh failed, retrying...');
         await delay(3);
     } while (!refresh);
@@ -21,7 +21,7 @@ async function activateMiningProcess(token, refreshToken, proxy) {
         activate = await activateMining(token, proxy);
         if (activate === "unauth") {
             log.warn('Unauthorized, refreshing token...');
-            const refreshedTokens = await refreshAccessToken(refreshToken, proxy);
+            const refreshedTokens = await refreshAccessToken(token, refreshToken, proxy);
             token = refreshedTokens.accessToken;
             refreshToken = refreshedTokens.refreshToken;
         } else if (!activate) {
@@ -41,7 +41,7 @@ async function getUserFarmInfo(accessToken, refreshToken, proxy, index) {
         userFarmInfo = await getUserFarm(accessToken);
         if (userFarmInfo === "unauth") {
             log.warn(`Account ${index} Unauthorized, refreshing token...`);
-            const refreshedTokens = await refreshAccessToken(refreshToken, proxy);
+            const refreshedTokens = await refreshAccessToken(accessToken, refreshToken, proxy);
             accessToken = refreshedTokens.accessToken;
             refreshToken = refreshedTokens.refreshToken;
         } else if (!userFarmInfo) log.warn(`Account ${index} get farm info failed, retrying...`);

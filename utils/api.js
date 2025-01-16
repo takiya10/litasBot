@@ -3,11 +3,15 @@ import log from "./logger.js"
 import { newAgent } from './helper.js';
 
 
-export async function getNewToken(refreshToken, proxy) {
+export async function getNewToken(token, refreshToken, proxy) {
     const agent = newAgent(proxy);
     const payload = { refreshToken };
     try {
         const response = await axios.post(`https://www.wallet.litas.io/api/v1/auth/refresh`, payload, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
             httpsAgent: agent,
         });
         return response.data;
