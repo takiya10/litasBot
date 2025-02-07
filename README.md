@@ -11,7 +11,7 @@
 
 - Node.js installed on your machine
 - `tokens.txt` file containing token and refresh token follow instruction below to get:
-- Open litas dashboard [https://www.wallet.litas.io](https://www.wallet.litas.io/invite/zlkcyber)
+- Open litas dashboard [https://www.wallet.litas.io](https://wallet.litas.io/invite/ngkassbhadick)
 - Login With your email
 - inspect or just F12, and find Application
 - in local storage find `token` and `refreshToken` and copy all both value.
